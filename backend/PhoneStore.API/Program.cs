@@ -197,15 +197,26 @@ app.Use(async (context, next) =>
 // Static files
 app.UseStaticFiles();
 
-// Swagger
-if (app.Environment.IsDevelopment())
+// Swagger (Available in Production for API docs)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhoneStore API v1");
+    c.RoutePrefix = "swagger";
+});
 
-// HTTPS
-app.UseHttpsRedirection();
+// Root & Health Check Endpoints (Ensures Render Health Checks Pass 100%)
+app.MapGet("/", () => Results.Ok(new 
+{ 
+    status = "healthy", 
+    service = "PhoneStore API", 
+    version = "1.0.0", 
+    swagger = "/swagger",
+    timestamp = DateTime.UtcNow 
+}));
+
+app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
 
 // CORS
 app.UseCors("AllowReact");
