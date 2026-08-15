@@ -8,8 +8,8 @@ RUN dotnet restore "PhoneStore.API.csproj"
 COPY . .
 RUN dotnet publish "PhoneStore.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Stage 2: Minimal Production Runtime (Alpine)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+# Stage 2: Production Runtime (Debian glibc - 100% stable & compatible with ICU / MySQL / BCrypt)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 10000
