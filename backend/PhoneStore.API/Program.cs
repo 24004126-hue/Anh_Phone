@@ -50,16 +50,21 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IStorageService, CloudinaryStorageService>();
 
-// Database
+// Database (Cloud & Local Support with Auto-Retry)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var connectionString =
-        builder.Configuration.GetConnectionString("DefaultConnection");
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? "server=localhost;port=3306;database=phonestore;user=root;password=;";
 
-    options.UseMySql(
-        connectionString,
-        ServerVersion.AutoDetect(connectionString)
-    );
+    var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
+    options.UseMySql(connectionString, serverVersion, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
 });
 
 // CORS (Production & Development Support)
