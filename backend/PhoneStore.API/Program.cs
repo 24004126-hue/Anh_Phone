@@ -215,43 +215,12 @@ app.UseAuthorization();
 // Controllers
 app.MapControllers().RequireRateLimiting("GlobalLimiter");
 
-// Ensure DB schema, RefreshTokens, and ProductVariants tables exist
+// Auto-Migration & Self-Healing Database Initialization
 try
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.ExecuteSqlRaw(@"
-        CREATE TABLE IF NOT EXISTS `RefreshTokens` (
-            `RefreshTokenId` INT NOT NULL AUTO_INCREMENT,
-            `UserId` INT NOT NULL,
-            `Token` VARCHAR(255) NOT NULL,
-            `ExpiresAt` DATETIME(6) NOT NULL,
-            `CreatedAt` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-            `IsRevoked` TINYINT(1) NOT NULL DEFAULT 0,
-            PRIMARY KEY (`RefreshTokenId`),
-            KEY `IX_RefreshTokens_UserId` (`UserId`),
-            KEY `idx_refreshtokens_token` (`Token`),
-            KEY `idx_refreshtokens_user_revoked` (`UserId`, `IsRevoked`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-        CREATE TABLE IF NOT EXISTS `ProductVariants` (
-            `VariantId` INT NOT NULL AUTO_INCREMENT,
-            `ProductId` INT NOT NULL,
-            `SKU` VARCHAR(50) NOT NULL,
-            `Color` VARCHAR(50) DEFAULT NULL,
-            `ColorHex` VARCHAR(20) DEFAULT NULL,
-            `Storage` VARCHAR(50) DEFAULT NULL,
-            `Price` DECIMAL(18,2) NOT NULL,
-            `DiscountPrice` DECIMAL(18,2) DEFAULT NULL,
-            `Quantity` INT NOT NULL DEFAULT 0,
-            `Thumbnail` VARCHAR(255) DEFAULT NULL,
-            `IsActive` TINYINT(1) NOT NULL DEFAULT 1,
-            PRIMARY KEY (`VariantId`),
-            KEY `IX_ProductVariants_ProductId` (`ProductId`),
-            KEY `idx_variants_product_sku` (`ProductId`, `SKU`),
-            KEY `idx_variants_product_active` (`ProductId`, `IsActive`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    ");
+    await DbInitializer.InitializeAsync(db);
 }
 catch (Exception ex)
 {
