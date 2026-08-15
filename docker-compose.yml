@@ -1,0 +1,66 @@
+services:
+  # 1. Database Service: MySQL 8.0
+  phonestore-db:
+    image: mysql:8.0
+    container_name: phonestore-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-phonestore}
+      MYSQL_USER: ${DB_USER:-phonestore_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-phonestore123}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/PhoneStore.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - phonestore-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # 2. Backend Service: .NET 8 Web API
+  phonestore-api:
+    build:
+      context: ./backend/PhoneStore.API
+      dockerfile: Dockerfile
+    container_name: phonestore-api
+    restart: always
+    depends_on:
+      phonestore-db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=phonestore-db;Database=${DB_NAME:-phonestore};User=${DB_USER:-phonestore_user};Password=${DB_PASSWORD:-phonestore123};"
+      Jwt__Key: ${JWT_KEY:-YourSuperSecretKeyWithAtLeast32CharactersLong!}
+      Jwt__Issuer: "PhoneStore.API"
+      Jwt__Audience: "PhoneStore.Client"
+      Jwt__ExpireMinutes: "60"
+    ports:
+      - "5055:5055"
+    networks:
+      - phonestore-net
+
+  # 3. Frontend Service: React Vite + Nginx
+  phonestore-web:
+    build:
+      context: ./frontend/phonestore-client
+      dockerfile: Dockerfile
+    container_name: phonestore-web
+    restart: always
+    depends_on:
+      - phonestore-api
+    ports:
+      - "3000:80"
+    networks:
+      - phonestore-net
+
+networks:
+  phonestore-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

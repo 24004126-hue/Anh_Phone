@@ -1,0 +1,54 @@
+{
+  "name": "PhoneStore Vietnam - Smartphone Chính Hãng VN/A",
+  "short_name": "PhoneStore",
+  "description": "Hệ thống bán lẻ điện thoại thông minh, phụ kiện công nghệ chính hãng hàng đầu Việt Nam",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Danh Sách Điện Thoại",
+      "short_name": "Sản Phẩm",
+      "description": "Xem toàn bộ các dòng smartphone",
+      "url": "/products",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "So Sánh Điện Thoại",
+      "short_name": "So Sánh",
+      "description": "So sánh thông số kỹ thuật",
+      "url": "/compare",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Sản Phẩm Yêu Thích",
+      "short_name": "Yêu Thích",
+      "description": "Danh sách smartphone đã lưu",
+      "url": "/wishlist",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Đơn Hàng Của Tôi",
+      "short_name": "Đơn Hàng",
+      "description": "Theo dõi trạng thái đơn hàng",
+      "url": "/orders",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
