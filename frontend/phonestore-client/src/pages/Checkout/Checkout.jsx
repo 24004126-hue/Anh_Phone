@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { 
     LuCreditCard, 
     LuTruck, 
@@ -36,6 +36,7 @@ const BANK_INFO = {
 
 function Checkout() {
     const navigate = useNavigate();
+    const location = useLocation();
     const { refreshCart } = useCart();
 
     const [cart, setCart] = useState(null);
@@ -125,7 +126,32 @@ function Checkout() {
             }
 
             const res = await cartApi.getCart(userId);
-            setCart(res.data);
+            let cartData = res.data;
+
+            if (cartData && cartData.items && cartData.items.length > 0) {
+                // Check if specific items were selected in Cart page
+                const selectedIds = location.state?.selectedItemIds 
+                    || JSON.parse(sessionStorage.getItem("phonestore_selected_cart_ids") || "null");
+
+                if (selectedIds && Array.isArray(selectedIds) && selectedIds.length > 0) {
+                    const filteredItems = cartData.items.filter(i => selectedIds.includes(i.cartItemId));
+                    if (filteredItems.length > 0) {
+                        const totalQty = filteredItems.reduce((sum, i) => sum + i.quantity, 0);
+                        const totalAmt = filteredItems.reduce((sum, i) => sum + (i.totalPrice || (i.discountPrice || i.price) * i.quantity), 0);
+                        cartData = {
+                            ...cartData,
+                            items: filteredItems,
+                            totalQuantity: totalQty,
+                            totalAmount: totalAmt,
+                            totalPrice: totalAmt,
+                            isPartialCheckout: true,
+                            selectedItemIds: selectedIds
+                        };
+                    }
+                }
+            }
+
+            setCart(cartData);
         } catch (error) {
             console.error(error);
             toast.error(error.response?.data?.message || "Không thể tải giỏ hàng.");
@@ -214,8 +240,18 @@ function Checkout() {
                 receiverPhone: receiverPhone.trim() || undefined,
                 shippingAddress: shippingAddress.trim(),
                 paymentMethod,
-                notes: combinedNotes
+                notes: combinedNotes,
+                items: cart.items,
+                totalAmount: Math.max(0, (cart.totalAmount || 0) - discountAmount)
             });
+
+            // Remove only the checked-out items from cart
+            if (cart.isPartialCheckout && cart.selectedItemIds) {
+                for (const itemId of cart.selectedItemIds) {
+                    await cartApi.removeItem(itemId);
+                }
+                sessionStorage.removeItem("phonestore_selected_cart_ids");
+            }
 
             await refreshCart();
 
