@@ -1,21 +1,42 @@
-export const MOCK_BRANDS = [
-    { brandId: 1, brandName: "Apple" },
-    { brandId: 2, brandName: "Samsung" },
-    { brandId: 3, brandName: "Xiaomi" },
-    { brandId: 4, brandName: "Asus" },
-    { brandId: 5, brandName: "Oppo" },
-    { brandId: 6, brandName: "Vivo" }
+export const INITIAL_BRANDS = [
+    { brandId: 1, brandName: "Apple", description: "Thương hiệu công nghệ đỉnh cao từ Mỹ" },
+    { brandId: 2, brandName: "Samsung", description: "Tập đoàn công nghệ hàng đầu thế giới từ Hàn Quốc" },
+    { brandId: 3, brandName: "Xiaomi", description: "Đột phá công nghệ vượt trội và cấu hình mạnh mẽ" },
+    { brandId: 4, brandName: "Asus", description: "Dẫn đầu thế giới về điện thoại chuyên game ROG Phone" },
+    { brandId: 5, brandName: "Oppo", description: "Chuyên gia chân dung và công nghệ sạc nhanh hàng đầu" },
+    { brandId: 6, brandName: "Vivo", description: "Đỉnh cao nhiếp ảnh di động ZEISS và thiết kế mỏng nhẹ" }
 ];
 
-export const MOCK_CATEGORIES = [
-    { categoryId: 1, categoryName: "iPhone" },
-    { categoryId: 2, categoryName: "Flagship Android" },
-    { categoryId: 3, categoryName: "Gaming Phone" },
-    { categoryId: 4, categoryName: "Smartphone Tầm Trung" },
-    { categoryId: 5, categoryName: "Phụ Kiện Chính Hãng" }
+export const INITIAL_CATEGORIES = [
+    { categoryId: 1, categoryName: "iPhone", description: "Các dòng điện thoại Apple iPhone chính hãng VN/A" },
+    { categoryId: 2, categoryName: "Flagship Android", description: "Smartphone cao cấp Android hàng đầu thế giới" },
+    { categoryId: 3, categoryName: "Gaming Phone", description: "Điện thoại gaming chuyên nghiệp tản nhiệt siêu tốc" },
+    { categoryId: 4, categoryName: "Smartphone Tầm Trung", description: "Điện thoại tầm trung giá tốt pin trâu màn hình đẹp" },
+    { categoryId: 5, categoryName: "Phụ Kiện Chính Hãng", description: "Củ sạc nhanh, ốp lưng, tai nghe và cáp sạc cao cấp" }
 ];
 
-export const MOCK_PRODUCTS = [
+export const INITIAL_USERS = [
+    {
+        userId: 1,
+        fullName: "Quản Trị Viên",
+        email: "admin@gmail.com",
+        phone: "0988888888",
+        address: "Trụ sở PhoneStore, Hoàn Kiếm, Hà Nội",
+        role: "Admin",
+        createdAt: "2026-01-01T08:00:00.000Z"
+    },
+    {
+        userId: 2,
+        fullName: "Khách Hàng Mẫu",
+        email: "customer@gmail.com",
+        phone: "0977777777",
+        address: "123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM",
+        role: "Customer",
+        createdAt: "2026-02-15T09:30:00.000Z"
+    }
+];
+
+export const INITIAL_PRODUCTS = [
     {
         productId: 1,
         productName: "iPhone 16 Pro Max 256GB Titan Sa Mạc",
@@ -225,3 +246,84 @@ export const MOCK_PRODUCTS = [
         status: "Available"
     }
 ];
+
+export const INITIAL_ORDERS = [
+    {
+        orderId: 1001,
+        userId: 2,
+        receiverName: "Khách Hàng Mẫu",
+        receiverPhone: "0977777777",
+        shippingAddress: "123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM",
+        paymentMethod: "COD",
+        notes: "Giao hàng trong giờ hành chính",
+        totalAmount: 33490000,
+        status: "Completed",
+        createdAt: "2026-08-14T10:30:00.000Z",
+        orderDetails: [
+            {
+                orderDetailId: 1,
+                orderId: 1001,
+                productId: 1,
+                productName: "iPhone 16 Pro Max 256GB Titan Sa Mạc",
+                thumbnail: "/images/hero/iphone16-desert.png",
+                quantity: 1,
+                unitPrice: 33490000,
+                totalPrice: 33490000
+            }
+        ]
+    },
+    {
+        orderId: 1002,
+        userId: 2,
+        receiverName: "Khách Hàng Mẫu",
+        receiverPhone: "0977777777",
+        shippingAddress: "123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM",
+        paymentMethod: "VNPAY",
+        notes: "Gọi trước khi giao 15 phút",
+        totalAmount: 28990000,
+        status: "Shipping",
+        createdAt: "2026-08-15T14:15:00.000Z",
+        orderDetails: [
+            {
+                orderDetailId: 2,
+                orderId: 1002,
+                productId: 2,
+                productName: "Samsung Galaxy S24 Ultra 5G 256GB",
+                thumbnail: "/images/products/samsung-galaxy-s24-ultra.jpg",
+                quantity: 1,
+                unitPrice: 28990000,
+                totalPrice: 28990000
+            }
+        ]
+    },
+    {
+        orderId: 1003,
+        userId: 1,
+        receiverName: "Quản Trị Viên",
+        receiverPhone: "0988888888",
+        shippingAddress: "Trụ sở PhoneStore, Hà Nội",
+        paymentMethod: "MOMO",
+        notes: "Đơn thử nghiệm hệ thống",
+        totalAmount: 27990000,
+        status: "Confirmed",
+        createdAt: "2026-08-15T18:00:00.000Z",
+        orderDetails: [
+            {
+                orderDetailId: 3,
+                orderId: 1003,
+                productId: 3,
+                productName: "Asus ROG Phone 8 Pro 512GB",
+                thumbnail: "/images/products/asus-rog-phone-8-pro.jpg",
+                quantity: 1,
+                unitPrice: 27990000,
+                totalPrice: 27990000
+            }
+        ]
+    }
+];
+
+export const MOCK_BRANDS = INITIAL_BRANDS;
+export const MOCK_CATEGORIES = INITIAL_CATEGORIES;
+export const MOCK_PRODUCTS = INITIAL_PRODUCTS;
+export const MOCK_USERS = INITIAL_USERS;
+export const MOCK_ORDERS = INITIAL_ORDERS;
