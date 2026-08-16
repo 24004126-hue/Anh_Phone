@@ -14,6 +14,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cloud Port Binding (Render, Railway, Docker, Localhost)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -91,6 +95,10 @@ builder.Services.AddCors(options =>
 });
 
 // JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "PhoneStore@2026_SuperSecretKey_123456789";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "PhoneStore.API";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "PhoneStore.Client";
+
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -102,19 +110,9 @@ builder.Services
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-
-                ValidIssuer =
-                    builder.Configuration["Jwt:Issuer"],
-
-                ValidAudience =
-                    builder.Configuration["Jwt:Audience"],
-
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(
-                            builder.Configuration["Jwt:Key"]!
-                        )
-                    )
+                ValidIssuer = jwtIssuer,
+                ValidAudience = jwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
             };
     });
 
@@ -231,16 +229,20 @@ app.UseAuthorization();
 // Controllers
 app.MapControllers().RequireRateLimiting("GlobalLimiter");
 
-// Auto-Migration & Self-Healing Database Initialization
-try
+// Auto-Migration & Self-Healing Database Initialization (Non-blocking background worker)
+_ = Task.Run(async () =>
 {
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await DbInitializer.InitializeAsync(db);
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"[DB Setup Note] {ex.Message}");
-}
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await DbInitializer.InitializeAsync(db);
+        Console.WriteLine("[DB Success] Database initialized and seeded successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[DB Setup Note] {ex.Message}");
+    }
+});
 
 app.Run();
