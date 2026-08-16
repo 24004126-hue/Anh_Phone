@@ -1,9 +1,15 @@
 import axiosClient from "./axiosClient";
+import { MOCK_BRANDS } from "../data/mockData";
 
 const brandApi = {
-
-    getAll() {
-        return axiosClient.get("/Brand");
+    async getAll() {
+        try {
+            const res = await axiosClient.get("/Brand");
+            if (Array.isArray(res.data) && res.data.length > 0) return res;
+            return { data: MOCK_BRANDS };
+        } catch {
+            return { data: MOCK_BRANDS };
+        }
     },
 
     getById(id) {
@@ -24,7 +30,6 @@ const brandApi = {
     delete(id) {
         return axiosClient.delete(`/Brand/${id}`);
     }
-
 };
 
 export default brandApi;

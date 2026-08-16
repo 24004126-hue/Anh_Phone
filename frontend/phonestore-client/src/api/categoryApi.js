@@ -1,9 +1,15 @@
 import axiosClient from "./axiosClient";
+import { MOCK_CATEGORIES } from "../data/mockData";
 
 const categoryApi = {
-
-    getAll() {
-        return axiosClient.get("/Category");
+    async getAll() {
+        try {
+            const res = await axiosClient.get("/Category");
+            if (Array.isArray(res.data) && res.data.length > 0) return res;
+            return { data: MOCK_CATEGORIES };
+        } catch {
+            return { data: MOCK_CATEGORIES };
+        }
     },
 
     getById(id) {
@@ -24,7 +30,6 @@ const categoryApi = {
     delete(id) {
         return axiosClient.delete(`/Category/${id}`);
     }
-
 };
 
 export default categoryApi;
