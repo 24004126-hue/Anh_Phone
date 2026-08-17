@@ -31,7 +31,8 @@ const BRANDS = [
     { name: "ASUS ROG", slug: "asus" },
     { name: "OPPO", slug: "oppo" },
     { name: "Vivo", slug: "vivo" },
-    { name: "Realme", slug: "realme" }
+    { name: "Realme", slug: "realme" },
+    { name: "Nubia Red Magic", slug: "nubia" }
 ];
 
 function Navbar() {

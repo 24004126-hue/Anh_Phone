@@ -1,20 +1,11 @@
 -- ==========================================================
--- PHONESTORE DATABASE SCHEMA & SEED DATA (49 SẢN PHẨM MOBILECITY)
--- Tương thích 100% với ASP.NET Core EF Core & MySQL (XAMPP / Aiven)
+-- PHONESTORE AIVEN CLOUD DATABASE SCHEMA & SEED DATA (49 SẢN PHẨM)
+-- Sử dụng trực tiếp trên Aiven Web Console hoặc DBeaver / HeidiSQL
 -- ==========================================================
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP DATABASE IF EXISTS `PhoneStore`;
-CREATE DATABASE `PhoneStore`
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
-
-USE `PhoneStore`;
-
--- ----------------------------------------------------------
--- 1. XÓA CÁC BẢNG NẾU ĐÃ TỒN TẠI (Theo thứ tự khóa ngoại)
--- ----------------------------------------------------------
+-- 1. XÓA CÁC BẢNG NẾU ĐÃ TỒN TẠI
 DROP TABLE IF EXISTS `OrderDetails`;
 DROP TABLE IF EXISTS `Orders`;
 DROP TABLE IF EXISTS `CartItems`;
@@ -27,9 +18,7 @@ DROP TABLE IF EXISTS `Categories`;
 DROP TABLE IF EXISTS `Brands`;
 DROP TABLE IF EXISTS `__EFMigrationsHistory`;
 
--- ----------------------------------------------------------
--- 2. BẢNG LỊCH SỬ MIGRATION (EF Core Migration History)
--- ----------------------------------------------------------
+-- 2. BẢNG LỊCH SỬ MIGRATION
 CREATE TABLE `__EFMigrationsHistory` (
     `MigrationId` VARCHAR(150) NOT NULL,
     `ProductVersion` VARCHAR(32) NOT NULL,
@@ -41,9 +30,7 @@ INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`) VALUES
 ('20260804145739_AddCart', '8.0.10'),
 ('20260804153732_AddOrder', '8.0.10');
 
--- ----------------------------------------------------------
 -- 3. BẢNG THƯƠNG HIỆU (Brands)
--- ----------------------------------------------------------
 CREATE TABLE `Brands` (
     `BrandId` INT NOT NULL AUTO_INCREMENT,
     `BrandName` VARCHAR(100) NOT NULL,
@@ -51,9 +38,7 @@ CREATE TABLE `Brands` (
     UNIQUE KEY `UQ_Brand_Name` (`BrandName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 4. BẢNG DANH MỤC (Categories)
--- ----------------------------------------------------------
 CREATE TABLE `Categories` (
     `CategoryId` INT NOT NULL AUTO_INCREMENT,
     `CategoryName` VARCHAR(100) NOT NULL,
@@ -61,9 +46,7 @@ CREATE TABLE `Categories` (
     UNIQUE KEY `UQ_Category_Name` (`CategoryName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 5. BẢNG NGƯỜI DÙNG (Users)
--- ----------------------------------------------------------
 CREATE TABLE `Users` (
     `UserId` INT NOT NULL AUTO_INCREMENT,
     `FullName` VARCHAR(100) NOT NULL,
@@ -77,9 +60,7 @@ CREATE TABLE `Users` (
     UNIQUE KEY `UQ_Users_Email` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 6. BẢNG SẢN PHẨM (Products)
--- ----------------------------------------------------------
 CREATE TABLE `Products` (
     `ProductId` INT NOT NULL AUTO_INCREMENT,
     `ProductName` VARCHAR(200) NOT NULL,
@@ -115,9 +96,7 @@ CREATE TABLE `Products` (
     CONSTRAINT `FK_Products_Categories_CategoryId` FOREIGN KEY (`CategoryId`) REFERENCES `Categories` (`CategoryId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 7. BẢNG GIỎ HÀNG (Carts)
--- ----------------------------------------------------------
 CREATE TABLE `Carts` (
     `CartId` INT NOT NULL AUTO_INCREMENT,
     `UserId` INT NOT NULL,
@@ -126,9 +105,7 @@ CREATE TABLE `Carts` (
     CONSTRAINT `FK_Carts_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 8. BẢNG CHI TIẾT GIỎ HÀNG (CartItems)
--- ----------------------------------------------------------
 CREATE TABLE `CartItems` (
     `CartItemId` INT NOT NULL AUTO_INCREMENT,
     `CartId` INT NOT NULL,
@@ -142,9 +119,7 @@ CREATE TABLE `CartItems` (
     CONSTRAINT `FK_CartItems_Products_ProductId` FOREIGN KEY (`ProductId`) REFERENCES `Products` (`ProductId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 9. BẢNG ĐƠN HÀNG (Orders)
--- ----------------------------------------------------------
 CREATE TABLE `Orders` (
     `OrderId` INT NOT NULL AUTO_INCREMENT,
     `UserId` INT NOT NULL,
@@ -162,9 +137,7 @@ CREATE TABLE `Orders` (
     CONSTRAINT `FK_Orders_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 10. BẢNG CHI TIẾT ĐƠN HÀNG (OrderDetails)
--- ----------------------------------------------------------
 CREATE TABLE `OrderDetails` (
     `OrderDetailId` INT NOT NULL AUTO_INCREMENT,
     `OrderId` INT NOT NULL,
@@ -180,9 +153,7 @@ CREATE TABLE `OrderDetails` (
     CONSTRAINT `FK_OrderDetails_Products_ProductId` FOREIGN KEY (`ProductId`) REFERENCES `Products` (`ProductId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 11. BẢNG MÃ LÀM MỚI PHIÊN (RefreshTokens)
--- ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `RefreshTokens` (
     `RefreshTokenId` INT NOT NULL AUTO_INCREMENT,
     `UserId` INT NOT NULL,
@@ -197,9 +168,7 @@ CREATE TABLE IF NOT EXISTS `RefreshTokens` (
     CONSTRAINT `FK_RefreshTokens_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------------------------------------
 -- 12. BẢNG BIẾN THỂ SẢN PHẨM (ProductVariants)
--- ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ProductVariants` (
     `VariantId` INT NOT NULL AUTO_INCREMENT,
     `ProductId` INT NOT NULL,
@@ -223,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `ProductVariants` (
 -- DỮ LIỆU MẪU BAN ĐẦU (SEED DATA)
 -- ==========================================================
 
--- 1. Thêm thương hiệu (Gồm 8 hãng: Apple, Samsung, Xiaomi, Asus, Oppo, Vivo, Realme, Nubia)
+-- 1. Thêm thương hiệu
 INSERT INTO `Brands` (`BrandId`, `BrandName`) VALUES
 (1, 'Apple'),
 (2, 'Samsung'),
@@ -248,7 +217,7 @@ INSERT INTO `Users` (`UserId`, `FullName`, `Email`, `PasswordHash`, `Phone`, `Ad
 (1, 'Quản Trị Viên', 'admin@gmail.com', '$2a$11$TBZ.1xLSa1XzOoQkJRukk.FN16mTGWGEYksPK7fw05yELTLw.kAJ2', '0988888888', 'Trụ sở PhoneStore, Hoàn Kiếm, Hà Nội', 'Admin', NOW(6)),
 (2, 'Khách Hàng Mẫu', 'customer@gmail.com', '$2a$11$OSb4GhLs/ErRwMxeLnv2repUkA513sSsPQpQ9eMAwNTx8mj.fVhl.', '0977777777', '123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', 'Customer', NOW(6));
 
--- 4. Thêm 49 sản phẩm theo đúng ảnh Img_Iphone & MobileCity
+-- 4. Thêm 49 sản phẩm theo ảnh Img_Iphone & MobileCity
 INSERT INTO `Products` (
     `ProductId`, `ProductName`, `SKU`, `Price`, `DiscountPrice`, `Quantity`, 
     `Description`, `Thumbnail`, `Screen`, `OperatingSystem`, `FrontCamera`, 
