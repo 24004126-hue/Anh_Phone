@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd frontend/phonestore-client && npm install && npm run build",
+  "outputDirectory": "frontend/phonestore-client/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
