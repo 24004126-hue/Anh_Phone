@@ -14,9 +14,10 @@ import {
     LuMonitor, 
     LuCheck, 
     LuMinus, 
-    LuPlus,
-    LuSmartphone,
-    LuTag
+    LuPlus, 
+    LuSmartphone, 
+    LuTag,
+    LuHardDrive
 } from "react-icons/lu";
 import productApi from "../../api/productApi";
 import cartApi from "../../api/cartApi";
@@ -410,60 +411,113 @@ function ProductDetail() {
                             </div>
 
                             {/* HARDWARE SPECS GRID */}
-                            <div className="mt-3 pt-3 border-top">
-                                <h6 className="fw-bold mb-3 font-display">Thông Số Kỹ Thuật Nổi Bật</h6>
-                                <div className="row g-2 small">
+                            <div className="mt-4 pt-3 border-top">
+                                <h6 className="fw-bold mb-3 font-display d-flex align-items-center gap-2">
+                                    <LuCpu className="text-primary" />
+                                    <span>Thông Số Kỹ Thuật Nổi Bật</span>
+                                </h6>
+                                <div className="row g-2">
                                     {product.chip && (
-                                        <div className="col-6 col-sm-4 d-flex align-items-center gap-2 p-2 bg-light rounded-3">
-                                            <LuCpu className="text-primary flex-shrink-0" size={18} />
-                                            <div>
-                                                <div className="text-muted" style={{ fontSize: "0.72rem" }}>Vi xử lý</div>
-                                                <div className="fw-semibold text-truncate">{product.chip}</div>
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuCpu size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Vi xử lý (CPU)</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.chip}>{product.chip}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
                                     {product.ram && (
-                                        <div className="col-6 col-sm-4 d-flex align-items-center gap-2 p-2 bg-light rounded-3">
-                                            <LuLayers className="text-primary flex-shrink-0" size={18} />
-                                            <div>
-                                                <div className="text-muted" style={{ fontSize: "0.72rem" }}>Dung lượng RAM</div>
-                                                <div className="fw-semibold text-truncate">{product.ram}</div>
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuLayers size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Dung lượng RAM</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.ram}>{product.ram}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {product.storage && (
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuHardDrive size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Bộ nhớ trong</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.storage}>{product.storage}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
                                     {product.screen && (
-                                        <div className="col-6 col-sm-4 d-flex align-items-center gap-2 p-2 bg-light rounded-3">
-                                            <LuMonitor className="text-primary flex-shrink-0" size={18} />
-                                            <div>
-                                                <div className="text-muted" style={{ fontSize: "0.72rem" }}>Màn hình</div>
-                                                <div className="fw-semibold text-truncate">{product.screen}</div>
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuMonitor size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Màn hình</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.screen}>{product.screen}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
                                     {product.battery && (
-                                        <div className="col-6 col-sm-4 d-flex align-items-center gap-2 p-2 bg-light rounded-3">
-                                            <LuBattery className="text-primary flex-shrink-0" size={18} />
-                                            <div>
-                                                <div className="text-muted" style={{ fontSize: "0.72rem" }}>Pin & Sạc</div>
-                                                <div className="fw-semibold text-truncate">{product.battery}</div>
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuBattery size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Pin & Sạc nhanh</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.battery}>{product.battery}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
                                     {product.rearCamera && (
-                                        <div className="col-6 col-sm-4 d-flex align-items-center gap-2 p-2 bg-light rounded-3">
-                                            <LuCamera className="text-primary flex-shrink-0" size={18} />
-                                            <div>
-                                                <div className="text-muted" style={{ fontSize: "0.72rem" }}>Camera sau</div>
-                                                <div className="fw-semibold text-truncate">{product.rearCamera}</div>
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuCamera size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Camera sau</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.rearCamera}>{product.rearCamera}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {product.frontCamera && (
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuCamera size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Camera trước</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.frontCamera}>{product.frontCamera}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
                                     {product.operatingSystem && (
-                                        <div className="col-6 col-sm-4 d-flex align-items-center gap-2 p-2 bg-light rounded-3">
-                                            <LuSmartphone className="text-primary flex-shrink-0" size={18} />
-                                            <div>
-                                                <div className="text-muted" style={{ fontSize: "0.72rem" }}>Hệ điều hành</div>
-                                                <div className="fw-semibold text-truncate">{product.operatingSystem}</div>
+                                        <div className="col-12 col-sm-6">
+                                            <div className="d-flex align-items-center gap-2 p-2 px-3 rounded-3 h-100" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                                                <div className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-2 bg-primary bg-opacity-10 text-primary" style={{ width: 34, height: 34 }}>
+                                                    <LuSmartphone size={17} />
+                                                </div>
+                                                <div className="min-w-0 flex-grow-1">
+                                                    <div className="text-muted" style={{ fontSize: "0.72rem" }}>Hệ điều hành</div>
+                                                    <div className="fw-semibold text-dark text-break small" style={{ fontSize: "0.82rem", lineHeight: 1.35 }} title={product.operatingSystem}>{product.operatingSystem}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
