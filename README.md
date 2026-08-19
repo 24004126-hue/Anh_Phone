@@ -204,18 +204,6 @@ dotnet test PhoneStore.Tests/PhoneStore.Tests.csproj
 ### Frontend: `frontend/phonestore-client/.env`
 ```env
 VITE_API_BASE_URL=http://localhost:5055/api
-```
-
----
-
-## 👥 Tài Khoản Trải Nghiệm Mặc Định (Demo Accounts)
-
-| Vai trò (Role) | Email | Mật khẩu (Password) |
-| :--- | :--- | :--- |
-| **Quản trị viên (Admin)** | `admin@gmail.com` | `admin123` |
-| **Khách hàng (Customer)** | `customer@gmail.com` | `customer123` |
-
----
 
 ## 📄 Bản Quyền (License)
 Dự án được phân phối dưới giấy phép **MIT License**. Mọi chi tiết vui lòng xem file [LICENSE](LICENSE).
