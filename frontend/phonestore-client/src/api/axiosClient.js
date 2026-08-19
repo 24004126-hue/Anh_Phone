@@ -1,6 +1,17 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5055/api";
+const getApiBaseUrl = () => {
+    if (import.meta.env.VITE_API_BASE_URL) {
+        return import.meta.env.VITE_API_BASE_URL;
+    }
+    const hostname = typeof window !== "undefined" ? window.location.hostname : "localhost";
+    if (hostname && hostname !== "localhost" && hostname !== "127.0.0.1" && !hostname.includes("vercel.app")) {
+        return `http://${hostname}:5055/api`;
+    }
+    return "http://localhost:5055/api";
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const axiosClient = axios.create({
     baseURL: API_BASE_URL,

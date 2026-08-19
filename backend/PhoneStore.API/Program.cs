@@ -15,7 +15,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Cloud Port Binding (Render, Railway, Docker, Localhost)
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5055";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Controllers
